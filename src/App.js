@@ -25,7 +25,7 @@ function FRSTViewer() {
       headerLines.push(lines.shift().trim());
     }
     const header = headerLines.join('\n');
-    const sections = lines.join('\n').split(/====================\s+/);
+    const sections = lines.join('\n').split(/^={10,}\s+/m);
     const parsedData = {};
     sections.slice(0, -1).forEach(section => { // Ignore the last section
       const sectionLines = section.trim().split('\n').filter(line => line.trim() !== '' && !line.match(/^\((If an|There is no)/));
