@@ -21,22 +21,26 @@ function FRSTViewer() {
   const parseFRST = (content) => {
     const lines = content.split('\n');
     const headerLines = [];
-    //match at least 10, this does not have to be the exact number just more than sub-readers like Edge:
     while (lines.length > 0 && !lines[0].startsWith('==========')) { 
       headerLines.push(lines.shift().trim());
     }
     const header = headerLines.join('\n');
     const sections = lines.join('\n').split(/^={10,}\s+/m);
     const parsedData = {};
-    sections.slice(0, -1).forEach(section => { // Ignore the last section
-      const sectionLines = section.trim().split('\n').filter(line => line.trim() !== '' && !line.match(/^\((If an|There is no)/));
+    sections.slice(0, -1).forEach(section => {
+      const sectionLines = section.trim().split('\n').filter(line => 
+        line.trim() !== '' && 
+        !line.match(/^\((If an|There is no)/)
+      );
       if (sectionLines.length > 0) {
-        const sectionTitle = sectionLines.shift().trim().replace(/=+/, '').trim();
+        let sectionTitle = sectionLines.shift().trim().replace(/=+/, '').trim();
+        sectionTitle = sectionTitle.replace(/\s*\(Whitelisted\)\s*/i, '');
         parsedData[sectionTitle] = sectionLines;
       }
     });
     return { header, sections: parsedData };
   };
+  
 
   return (
     <div>
