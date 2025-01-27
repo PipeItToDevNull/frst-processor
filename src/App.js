@@ -25,10 +25,10 @@ function FRSTViewer() {
       headerLines.push(lines.shift().trim());
     }
     const header = headerLines.join('\n');
-    const sections = lines.join('\n').split(/====================/);
+    const sections = lines.join('\n').split(/====================\s+/);
     const parsedData = {};
-    sections.forEach(section => {
-      const sectionLines = section.trim().split('\n').filter(line => line.trim() !== '' && !line.match(/^\(If an (item|entry) is included in the fixlist/));
+    sections.slice(0, -1).forEach(section => { // Ignore the last section
+      const sectionLines = section.trim().split('\n').filter(line => line.trim() !== '' && !line.match(/^\((If an|There is no)/));
       if (sectionLines.length > 0) {
         const sectionTitle = sectionLines.shift().trim().replace(/=+/, '').trim();
         parsedData[sectionTitle] = sectionLines;
@@ -42,14 +42,22 @@ function FRSTViewer() {
       <input type="file" onChange={handleFileChange} />
       {header && (
         <div>
-          <h2>Farbar</h2>
+          <h2>Header</h2>
           <pre>{header}</pre>
         </div>
       )}
       {parsedData && (
         <div>
+          <h2>Table of Contents</h2>
+          <ul>
+            {Object.keys(parsedData).map((sectionTitle, index) => (
+              <li key={index}>
+                <a href={`#section-${index}`}>{sectionTitle}</a>
+              </li>
+            ))}
+          </ul>
           {Object.keys(parsedData).map((sectionTitle, index) => (
-            <div key={index}>
+            <div key={index} id={`section-${index}`}>
               <h2>{sectionTitle}</h2>
               <ul>
                 {parsedData[sectionTitle].map((line, lineIndex) => (
