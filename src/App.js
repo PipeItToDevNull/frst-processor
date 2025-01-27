@@ -21,7 +21,8 @@ function FRSTViewer() {
   const parseFRST = (content) => {
     const lines = content.split('\n');
     const headerLines = [];
-    while (lines.length > 0 && !lines[0].startsWith('====================')) {
+    //match at least 10, this does not have to be the exact number just more than sub-readers like Edge:
+    while (lines.length > 0 && !lines[0].startsWith('==========')) { 
       headerLines.push(lines.shift().trim());
     }
     const header = headerLines.join('\n');
