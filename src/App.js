@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 function FRSTViewer() {
+  const [header, setHeader] = useState('');
   const [parsedData, setParsedData] = useState(null);
 
   const handleFileChange = (event) => {
@@ -10,28 +11,41 @@ function FRSTViewer() {
       reader.onload = (e) => {
         const content = e.target.result;
         const parsed = parseFRST(content);
-        setParsedData(parsed);
+        setHeader(parsed.header);
+        setParsedData(parsed.sections);
       };
       reader.readAsText(file);
     }
   };
 
   const parseFRST = (content) => {
-    const sections = content.split(/====================/);
+    const lines = content.split('\n');
+    const headerLines = [];
+    while (lines.length > 0 && !lines[0].startsWith('====================')) {
+      headerLines.push(lines.shift().trim());
+    }
+    const header = headerLines.join('\n');
+    const sections = lines.join('\n').split(/====================/);
     const parsedData = {};
     sections.forEach(section => {
-      const lines = section.trim().split('\n').filter(line => line.trim() !== '' && !line.startsWith('(If an entry is included in the fixlist,'));
-      if (lines.length > 0) {
-        const sectionTitle = lines.shift().trim().replace(/=+/, '').trim();
-        parsedData[sectionTitle] = lines;
+      const sectionLines = section.trim().split('\n').filter(line => line.trim() !== '' && !line.match(/^\(If an (item|entry) is included in the fixlist/));
+      if (sectionLines.length > 0) {
+        const sectionTitle = sectionLines.shift().trim().replace(/=+/, '').trim();
+        parsedData[sectionTitle] = sectionLines;
       }
     });
-    return parsedData;
+    return { header, sections: parsedData };
   };
 
   return (
     <div>
       <input type="file" onChange={handleFileChange} />
+      {header && (
+        <div>
+          <h2>Farbar</h2>
+          <pre>{header}</pre>
+        </div>
+      )}
       {parsedData && (
         <div>
           {Object.keys(parsedData).map((sectionTitle, index) => (
