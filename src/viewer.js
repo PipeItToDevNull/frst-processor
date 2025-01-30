@@ -85,7 +85,7 @@ function FRSTViewer() {
             return parsedData[fileType][sectionTitle][lineIndex];
         });
         console.log(selectedData);
-        navigate('/selected', { state: { selectedData } });
+        navigate('/fixlist', { state: { selectedData } });
     };
 
     return (

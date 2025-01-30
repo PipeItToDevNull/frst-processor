@@ -8,7 +8,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<Viewer />} />
-                <Route path="/selected" element={<FixList />} />
+                <Route path="/fixlist" element={<FixList />} />
             </Routes>
         </Router>
     );
