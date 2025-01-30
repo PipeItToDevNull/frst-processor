@@ -28,11 +28,6 @@ body {
     font-family: verdana, arial;
 }
 
-.selected {
-    background-color: var(--color-blue);
-    border-radius: .5rem;
-    padding: .25rem;
-}
 
 /* The main body of the page, used to center text and #content */
 #container {
@@ -47,35 +42,10 @@ body {
     padding: 1em;
 }
 
-/* The content for a JSON result */
-.result-content {
-    margin-left: 2em;
-    font-family: monospace;
-    white-space: pre-line;
-}
-
-/* Rename our headers */
-.result-header.analysis::before {
-    content: "Analysis";
-    visibility: visible;
-}
-.result-header.analysis {
-    visibility: hidden;
-}
-
-.result-header.post::before {
-    content: "Post Processing";
-    visibility: visible;
-}
-.result-header.post {
-    visibility: hidden;
-}
-.result-header.dmpInfo::before {
-    content: "Dump Info";
-    visibility: visible;
-}
-.result-header.dmpInfo {
-    visibility: hidden;
+.selected {
+    background-color: var(--color-blue);
+    border-radius: .5rem;
+    padding: .25rem;
 }
 
 /* used for upload items */

@@ -91,7 +91,7 @@ function FRSTViewer() {
     return (
         <div>
         <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
-        View Selected
+        Create Fixlist
         </button>
         <input type="file" onChange={handleFileChange} />
         <div id="container">
@@ -102,7 +102,7 @@ function FRSTViewer() {
             <pre>{header}</pre>
             </div>
         )}
-        {parsedData && (
+        {parsedData ? (
             <div>
             <h2>Table of Contents</h2>
             <ul>
@@ -140,6 +140,8 @@ function FRSTViewer() {
                 </div>
             ))}
             </div>
+        ) : (
+            <p>Upload an archive containing FRST.txt and Addition.txt to start.</p>
         )}
         </div>
         </div>
