@@ -28,6 +28,12 @@ body {
     font-family: verdana, arial;
 }
 
+.selected {
+    background-color: var(--color-blue);
+    border-radius: .5rem;
+    padding: .25rem;
+}
+
 /* The main body of the page, used to center text and #content */
 #container {
     margin-left: 10%;
