@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import JSZip from 'jszip';
+import { useHistory } from 'react-router-dom';
 
 function FRSTViewer() {
     const [header, setHeader] = useState('');
     const [parsedData, setParsedData] = useState(null);
     const [selectedLines, setSelectedLines] = useState([]);
+    const history = useHistory();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -77,8 +79,19 @@ function FRSTViewer() {
         return selectedLines.includes(lineId);
     };
 
+    const handleViewSelected = () => {
+        const selectedData = selectedLines.map(lineId => {
+            const [fileType, sectionTitle, lineIndex] = lineId.split('-');
+            return parsedData[fileType][sectionTitle][lineIndex];
+        });
+        history.push('/selected', { selectedData });
+    };
+
     return (
         <div>
+            <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
+                View Selected
+            </button>
             <input type="file" onChange={handleFileChange} />
             {header && (
                 <div>
