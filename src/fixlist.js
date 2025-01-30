@@ -8,13 +8,15 @@ function SelectedLines() {
     console.log(selectedData); // Add this line to debug
 
     return (
-        <div>
-            <h2>Selected Lines</h2>
-            <ul>
-                {selectedData.map((line, index) => (
-                    <li key={index}>{line}</li>
-                ))}
-            </ul>
+        <div id="container">
+            <h2>Fixlist</h2>
+            <div id="content">
+                <ul>
+                    {selectedData.map((line, index) => (
+                        <li key={index}>{line}</li>
+                    ))}
+                </ul>
+</div>
         </div>
     );
 }
