@@ -4,7 +4,6 @@ import JSZip from 'jszip';
 function FRSTViewer() {
     const [header, setHeader] = useState('');
     const [parsedData, setParsedData] = useState(null);
-    const [additionData, setAdditionData] = useState(null);
     
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -26,8 +25,10 @@ function FRSTViewer() {
                     const parsedAddition = parseFRST(additionContent);
                     
                     setHeader(parsedFRST.header);
-                    setParsedData(parsedFRST.sections);
-                    setAdditionData(parsedAddition.sections);
+                    setParsedData({
+                        FRST: parsedFRST.sections,
+                        Addition: parsedAddition.sections
+                    });
                 } else {
                     console.error('One or both files are missing in the zip');
                 }
@@ -43,7 +44,7 @@ function FRSTViewer() {
             headerLines.push(lines.shift().trim());
         }
         const header = headerLines.join('\n');
-        const sections = lines.join('\n').split(/^={10,}\s+/m);
+        const sections = lines.join('\n').split(/^={19,}\s+/m);
         const parsedData = {};
         sections.slice(0, -1).forEach(section => {
             const sectionLines = section.trim().split('\n').filter(line => 
@@ -70,44 +71,33 @@ function FRSTViewer() {
         )}
         {parsedData && (
             <div>
-            <h2>FRST Table of Contents</h2>
+            <h2>Table of Contents</h2>
             <ul>
-            {Object.keys(parsedData).map((sectionTitle, index) => (
+            {Object.keys(parsedData).map((fileType, index) => (
                 <li key={index}>
-                <a href={`#frst-section-${index}`}>{sectionTitle}</a>
+                <strong>{fileType}</strong>
+                <ul>
+                    {Object.keys(parsedData[fileType]).map((sectionTitle, subIndex) => (
+                    <li key={subIndex}>
+                        <a href={`#${fileType.toLowerCase()}-section-${subIndex}`}>{sectionTitle}</a>
+                    </li>
+                    ))}
+                </ul>
                 </li>
             ))}
             </ul>
-            {Object.keys(parsedData).map((sectionTitle, index) => (
-                <div key={index} id={`frst-section-${index}`}>
-                <h2>{sectionTitle}</h2>
-                <ul>
-                {parsedData[sectionTitle].map((line, lineIndex) => (
-                    <li key={lineIndex}>{line}</li>
+            {Object.keys(parsedData).map((fileType, index) => (
+                <div key={index}>
+                {Object.keys(parsedData[fileType]).map((sectionTitle, subIndex) => (
+                    <div key={subIndex} id={`${fileType.toLowerCase()}-section-${subIndex}`}>
+                    <h2>{sectionTitle}</h2>
+                    <ul>
+                        {parsedData[fileType][sectionTitle].map((line, lineIndex) => (
+                        <li key={lineIndex}>{line}</li>
+                        ))}
+                    </ul>
+                    </div>
                 ))}
-                </ul>
-                </div>
-            ))}
-            </div>
-        )}
-        {additionData && (
-            <div>
-            <h2>Addition Table of Contents</h2>
-            <ul>
-            {Object.keys(additionData).map((sectionTitle, index) => (
-                <li key={index}>
-                <a href={`#addition-section-${index}`}>{sectionTitle}</a>
-                </li>
-            ))}
-            </ul>
-            {Object.keys(additionData).map((sectionTitle, index) => (
-                <div key={index} id={`addition-section-${index}`}>
-                <h2>{sectionTitle}</h2>
-                <ul>
-                {additionData[sectionTitle].map((line, lineIndex) => (
-                    <li key={lineIndex}>{line}</li>
-                ))}
-                </ul>
                 </div>
             ))}
             </div>
