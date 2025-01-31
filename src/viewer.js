@@ -49,7 +49,8 @@ function FRSTViewer() {
             headerLines.push(lines.shift().trim());
         }
         const header = headerLines.join('\n');
-        const sections = lines.join('\n').split(/^={19,}\s+/m);
+        // Hacky method of making sections from 19 or more but less than 30 "="
+        const sections = lines.join('\n').split(/^={19,29}\s+/m);
         const parsedData = {};
         sections.slice(0, -1).forEach(section => {
             const sectionLines = section.trim().split('\n').filter(line =>
