@@ -68,18 +68,19 @@ function FRSTViewer() {
 
     const handleLineClick = (fileType, sectionTitle, lineIndex) => {
         const lineId = `${fileType}-${sectionTitle}-${lineIndex}`;
+        const lineData = { fileType, sectionTitle, lineIndex };
         setSelectedLines(prevSelectedLines => {
-            if (prevSelectedLines.includes(lineId)) {
-                return prevSelectedLines.filter(id => id !== lineId);
+            if (prevSelectedLines.some(line => line.lineId === lineId)) {
+                return prevSelectedLines.filter(line => line.lineId !== lineId);
             } else {
-                return [...prevSelectedLines, lineId];
+                return [...prevSelectedLines, { lineId, ...lineData }];
             }
         });
     };
 
     const isSelected = (fileType, sectionTitle, lineIndex) => {
         const lineId = `${fileType}-${sectionTitle}-${lineIndex}`;
-        return selectedLines.includes(lineId);
+        return selectedLines.some(line => line.lineId === lineId);
     };
 
     const handleViewSelected = () => {
