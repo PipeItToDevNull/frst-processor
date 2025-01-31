@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import JSZip from 'jszip';
-import { useNavigate } from 'react-router-dom';
+import FileUploader from './fileUploader';
+import ContentDisplay from './contentDisplay';
+import Fixlist from './fixlist';
 
 function FRSTViewer() {
     const [header, setHeader] = useState('');
     const [parsedData, setParsedData] = useState(null);
     const [selectedLines, setSelectedLines] = useState([]);
-    const navigate = useNavigate();
-    
+    const [showSelected, setShowSelected] = useState(false);
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -15,18 +17,18 @@ function FRSTViewer() {
             reader.onload = async (e) => {
                 const zip = await JSZip.loadAsync(e.target.result);
                 console.log(zip.files); // Log the contents of the zip file
-                
+
                 const frstFile = zip.file('FRST.txt');
                 const additionFile = zip.file('Addition.txt');
-                
+
                 if (frstFile && additionFile) {
                     console.log('FRST and Addition present');
                     const frstContent = await frstFile.async('text');
                     const additionContent = await additionFile.async('text');
-                    
+
                     const parsedFRST = parseFRST(frstContent);
                     const parsedAddition = parseFRST(additionContent);
-                    
+
                     setHeader(parsedFRST.header);
                     setParsedData({
                         FRST: parsedFRST.sections,
@@ -39,7 +41,7 @@ function FRSTViewer() {
             reader.readAsArrayBuffer(file);
         }
     };
-    
+
     const parseFRST = (content) => {
         const lines = content.split('\n');
         const headerLines = [];
@@ -62,7 +64,7 @@ function FRSTViewer() {
         });
         return { header, sections: parsedData };
     };
-    
+
     const handleLineClick = (fileType, sectionTitle, lineIndex) => {
         const lineId = `${fileType}-${sectionTitle}-${lineIndex}`;
         setSelectedLines(prevSelectedLines => {
@@ -73,78 +75,37 @@ function FRSTViewer() {
             }
         });
     };
-    
+
     const isSelected = (fileType, sectionTitle, lineIndex) => {
         const lineId = `${fileType}-${sectionTitle}-${lineIndex}`;
         return selectedLines.includes(lineId);
     };
-    
+
     const handleViewSelected = () => {
-        const selectedData = selectedLines.map(lineId => {
-            const [fileType, sectionTitle, lineIndex] = lineId.split('-');
-            return parsedData[fileType][sectionTitle][lineIndex];
-        });
-        console.log(selectedData);
-        navigate('/fixlist', { state: { selectedData } });
+        setShowSelected(true);
     };
-    
+
     return (
         <div>
-        <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
-        Create Fixlist
-        </button>
-        <input type="file" onChange={handleFileChange} />
-        <div id="container">
-        <h2>FRST Parser</h2>
-        <div id="content">
-        {header && (
-            <div>
-            <pre>{header}</pre>
-            </div>
-        )}
-        {parsedData ? (
-            <div>
-            <h2>Table of Contents</h2>
-            <ul>
-            {Object.keys(parsedData).map((fileType, index) => (
-                <li key={index}>
-                <strong>{fileType}</strong>
-                <ul>
-                {Object.keys(parsedData[fileType]).map((sectionTitle, subIndex) => (
-                    <li key={subIndex}>
-                    <a href={`#${fileType.toLowerCase()}-section-${subIndex}`}>{sectionTitle}</a>
-                    </li>
-                ))}
-                </ul>
-                </li>
-            ))}
-            </ul>
-            {Object.keys(parsedData).map((fileType, index) => (
-                <div key={index}>
-                {Object.keys(parsedData[fileType]).map((sectionTitle, subIndex) => (
-                    <div key={subIndex} id={`${fileType.toLowerCase()}-section-${subIndex}`}>
-                    <h2>{sectionTitle}</h2>
-                    <ul>
-                    {parsedData[fileType][sectionTitle].map((line, lineIndex) => (
-                        <li
-                        key={lineIndex}
-                        className={isSelected(fileType, sectionTitle, lineIndex) ? 'selected' : ''}
-                        onClick={() => handleLineClick(fileType, sectionTitle, lineIndex)}
-                        >
-                        {line}
-                        </li>
-                    ))}
-                    </ul>
-                    </div>
-                ))}
+            <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
+                Create Fixlist
+            </button>
+            <FileUploader onFileChange={handleFileChange} />
+            <div id="container">
+                <h2>FRST Parser</h2>
+                <div id="content">
+                {showSelected ? (
+                    <Fixlist selectedLines={selectedLines} parsedData={parsedData} />
+                ) : (
+                    <ContentDisplay
+                        header={header}
+                        parsedData={parsedData}
+                        isSelected={isSelected}
+                        handleLineClick={handleLineClick}
+                    />
+                )}
                 </div>
-            ))}
             </div>
-        ) : (
-            <p>Upload an archive containing FRST.txt and Addition.txt to start.</p>
-        )}
-        </div>
-        </div>
         </div>
     );
 }
