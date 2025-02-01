@@ -22,15 +22,15 @@ function Fixlist({ selectedLines, parsedData }) {
     return (
         <div>
             {Object.keys(groupedLines).map((sectionTitle, index) => (
-                <div key={index}>
+                <div class="fl-outer-section">
                     {customHeaders[sectionTitle] || <h3>{sectionTitle}</h3>}
-                    <ul>
+                    <div class="fl-inner-section">
                         {groupedLines[sectionTitle].map((line, lineIndex) => (
-                            <li key={lineIndex}>
+                            <div class="fl-line">
                                 {parsedData[line.fileType][sectionTitle][line.lineIndex]}
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             ))}
         </div>
