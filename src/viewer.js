@@ -89,7 +89,7 @@ function FRSTViewer() {
     return (
         <div>
         <div id="container">
-        <h2>FRST Parser</h2>
+        <h1>FRST Parser</h1>
         {!showSelected && (
             <>
             <div class="button-container">

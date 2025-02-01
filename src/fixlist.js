@@ -2,9 +2,9 @@ import React from 'react';
 
 // Define an array of custom headers based on section titles
 const customHeaders = {
-    "Processes": <h4>Procs</h4>,
-    "Scheduled Tasks": <h4>Tasks</h4>,
-    "Section 3": <h4>Custom Header for Section 3</h4>,
+    "Processes": "Procs",
+    "Scheduled Tasks": "Tasks",
+    "Section 3": "Custom Header for Section 3",
     // Add more custom headers as needed
 };
 
@@ -23,7 +23,7 @@ function Fixlist({ selectedLines, parsedData }) {
         <div>
             {Object.keys(groupedLines).map((sectionTitle, index) => (
                 <div class="fl-outer-section">
-                    {customHeaders[sectionTitle] || <h3>{sectionTitle}</h3>}
+                    <h2>{customHeaders[sectionTitle] || {sectionTitle}}</h2>
                     <div class="fl-inner-section">
                         {groupedLines[sectionTitle].map((line, lineIndex) => (
                             <div class="fl-line">
