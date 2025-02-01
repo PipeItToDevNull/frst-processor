@@ -88,23 +88,27 @@ function FRSTViewer() {
 
     return (
         <div>
-            <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
-                Create Fixlist
-            </button>
-            <input type="file" onChange={handleFileChange} />
+            {!showSelected && (
+                <>
+                    <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
+                        Create Fixlist
+                    </button>
+                    <input type="file" onChange={handleFileChange} />
+                </>
+            )}
             <div id="container">
                 <h2>FRST Parser</h2>
                 <div id="content">
-                {showSelected ? (
-                    <Fixlist selectedLines={selectedLines} parsedData={parsedData} />
-                ) : (
-                    <ContentDisplay
-                        header={header}
-                        parsedData={parsedData}
-                        isSelected={isSelected}
-                        handleLineClick={handleLineClick}
-                    />
-                )}
+                    {showSelected ? (
+                        <Fixlist selectedLines={selectedLines} parsedData={parsedData} />
+                    ) : (
+                        <ContentDisplay
+                            header={header}
+                            parsedData={parsedData}
+                            isSelected={isSelected}
+                            handleLineClick={handleLineClick}
+                        />
+                    )}
                 </div>
             </div>
         </div>
