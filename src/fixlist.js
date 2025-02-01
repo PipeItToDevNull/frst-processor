@@ -1,4 +1,5 @@
 import React from 'react';
+import { saveAs } from 'file-saver';
 
 const cannedHeader = `Download the attached **fixlist.txt** file and save it to the Desktop.
 
@@ -31,9 +32,33 @@ function Fixlist({ selectedLines, parsedData }) {
         acc[sectionTitle].push({ fileType, lineIndex });
         return acc;
     }, {});
-    
+
+    const generateFixlistContent = () => {
+        let content = `${fixlistStart}`;
+
+        Object.keys(groupedLines).forEach((sectionTitle) => {
+            groupedLines[sectionTitle].forEach((line) => {
+                content += `${parsedData[line.fileType][sectionTitle][line.lineIndex]}\n`;
+            });
+        });
+
+        content += `${fixlistEnd}`;
+        return content;
+    };
+
+    const downloadFixlist = () => {
+        const content = generateFixlistContent();
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, 'fixlist.txt');
+    };
+
     return (
         <div>
+            <div class="button-container">
+            <div class="button-div">
+            <button onClick={downloadFixlist}>Download Fixlist</button>
+            </div>
+            </div>
             <div className='content'>
                 <p>Review your completed fixlist below</p>
                 <p>Paste the following message block to the user to explain how to use this Fixlist</p>
@@ -42,24 +67,23 @@ function Fixlist({ selectedLines, parsedData }) {
                 {cannedHeader}
             </div>
             <div className="content bulk-content">
-            <div className="prewrap">
-                {fixlistStart}
-            </div>
-            {Object.keys(groupedLines).map((sectionTitle) => (
-                <div className="fl-outer-section" key={sectionTitle}>
-                    {/* <h2>{sectionTitle}</h2> */}
-                    <div className="fl-inner-section">
-                        {groupedLines[sectionTitle].map((line, index) => (
-                            <div className="fl-line" key={index}>
-                                {parsedData[line.fileType][sectionTitle][line.lineIndex]}
-                            </div>
-                        ))}
-                    </div>
+                <div className="prewrap">
+                    {fixlistStart}
                 </div>
-            ))}
-            <div className="prewrap">
-                {fixlistEnd}
-            </div>
+                {Object.keys(groupedLines).map((sectionTitle) => (
+                    <div className="fl-outer-section" key={sectionTitle}>
+                        <div className="fl-inner-section">
+                            {groupedLines[sectionTitle].map((line, index) => (
+                                <div className="fl-line" key={index}>
+                                    {parsedData[line.fileType][sectionTitle][line.lineIndex]}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+                <div className="prewrap">
+                    {fixlistEnd}
+                </div>
             </div>
         </div>
     );
