@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import JSZip from 'jszip';
-import FileUploader from './fileUploader';
 import ContentDisplay from './contentDisplay';
 import Fixlist from './fixlist';
 
@@ -92,7 +91,7 @@ function FRSTViewer() {
             <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
                 Create Fixlist
             </button>
-            <FileUploader onFileChange={handleFileChange} />
+            <input type="file" onChange={handleFileChange} />
             <div id="container">
                 <h2>FRST Parser</h2>
                 <div id="content">
