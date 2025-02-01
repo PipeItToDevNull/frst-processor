@@ -8,7 +8,7 @@ function FRSTViewer() {
     const [parsedData, setParsedData] = useState(null);
     const [selectedLines, setSelectedLines] = useState([]);
     const [showSelected, setShowSelected] = useState(false);
-
+    
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -16,18 +16,18 @@ function FRSTViewer() {
             reader.onload = async (e) => {
                 const zip = await JSZip.loadAsync(e.target.result);
                 console.log(zip.files); // Log the contents of the zip file
-
+                
                 const frstFile = zip.file('FRST.txt');
                 const additionFile = zip.file('Addition.txt');
-
+                
                 if (frstFile && additionFile) {
                     console.log('FRST and Addition present');
                     const frstContent = await frstFile.async('text');
                     const additionContent = await additionFile.async('text');
-
+                    
                     const parsedFRST = parseFRST(frstContent);
                     const parsedAddition = parseFRST(additionContent);
-
+                    
                     setHeader(parsedFRST.header);
                     setParsedData({
                         FRST: parsedFRST.sections,
@@ -40,7 +40,7 @@ function FRSTViewer() {
             reader.readAsArrayBuffer(file);
         }
     };
-
+    
     const parseFRST = (content) => {
         const lines = content.split('\n');
         const headerLines = [];
@@ -64,7 +64,7 @@ function FRSTViewer() {
         });
         return { header, sections: parsedData };
     };
-
+    
     const handleLineClick = (fileType, sectionTitle, lineIndex) => {
         const lineId = `${fileType}-${sectionTitle}-${lineIndex}`;
         const lineData = { fileType, sectionTitle, lineIndex };
@@ -76,41 +76,47 @@ function FRSTViewer() {
             }
         });
     };
-
+    
     const isSelected = (fileType, sectionTitle, lineIndex) => {
         const lineId = `${fileType}-${sectionTitle}-${lineIndex}`;
         return selectedLines.some(line => line.lineId === lineId);
     };
-
+    
     const handleViewSelected = () => {
         setShowSelected(true);
     };
-
+    
     return (
         <div>
-            {!showSelected && (
-                <>
-                    <button style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleViewSelected}>
-                        Create Fixlist
-                    </button>
-                    <input type="file" onChange={handleFileChange} />
-                </>
-            )}
-            <div id="container">
-                <h2>FRST Parser</h2>
-                <div id="content">
-                    {showSelected ? (
-                        <Fixlist selectedLines={selectedLines} parsedData={parsedData} />
-                    ) : (
-                        <ContentDisplay
-                            header={header}
-                            parsedData={parsedData}
-                            isSelected={isSelected}
-                            handleLineClick={handleLineClick}
-                        />
-                    )}
-                </div>
+        <div id="container">
+        <h2>FRST Parser</h2>
+        {!showSelected && (
+            <>
+            <div class="button-container">
+            <div class="button-div">
+            <input type="file" onChange={handleFileChange} />
             </div>
+            <div class="button-div">
+            <button onClick={handleViewSelected}>
+            Create Fixlist
+            </button>
+            </div>
+            </div>
+            </>
+        )}
+        <div id="content">
+        {showSelected ? (
+            <Fixlist selectedLines={selectedLines} parsedData={parsedData} />
+        ) : (
+            <ContentDisplay
+            header={header}
+            parsedData={parsedData}
+            isSelected={isSelected}
+            handleLineClick={handleLineClick}
+            />
+        )}
+        </div>
+        </div>
         </div>
     );
 }
