@@ -18,21 +18,21 @@ function Fixlist({ selectedLines, parsedData }) {
         acc[sectionTitle].push({ fileType, lineIndex });
         return acc;
     }, {});
-
+    
     return (
         <div>
-            {Object.keys(groupedLines).map((sectionTitle, index) => (
-                <div class="fl-outer-section">
-                    <h2>{customHeaders[sectionTitle] || {sectionTitle}}</h2>
-                    <div class="fl-inner-section">
-                        {groupedLines[sectionTitle].map((line, lineIndex) => (
-                            <div class="fl-line">
-                                {parsedData[line.fileType][sectionTitle][line.lineIndex]}
-                            </div>
-                        ))}
-                    </div>
+        {Object.keys(groupedLines).map((sectionTitle, index) => (
+            <div class="fl-outer-section">
+            <h2>{customHeaders[sectionTitle] ?? sectionTitle}</h2>
+            <div class="fl-inner-section">
+            {groupedLines[sectionTitle].map((line, lineIndex) => (
+                <div class="fl-line">
+                {parsedData[line.fileType][sectionTitle][line.lineIndex]}
                 </div>
             ))}
+            </div>
+            </div>
+        ))}
         </div>
     );
 }
