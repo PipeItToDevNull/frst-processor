@@ -1,12 +1,19 @@
 import React from 'react';
 
-// Define an array of section names based on section titles
-const sectionss = {
-    "Processes": "Procs",
-    "Scheduled Tasks": "Tasks",
-    "Section 3": "Custom Header for Section 3",
-    // Add more as needed
-};
+const headMessage = `
+Download attached **fixlist.txt** file and save it to the Desktop.
+
+**NOTE** It's important that both files, **FRST/FRST64** and **fixlist.txt** are in the same location or the fix will not work.
+
+**NOTICE** This script was written specifically for this user, for use on that particular machine. 
+Running this on another machine may cause damage to your operating system**
+
+Run **FRST/FRST64** and press the **Fix** button just once and wait.
+If for some reason the tool needs a restart, please make sure you let the system restart normally. 
+After that let the tool complete its run.
+
+When finished FRST will generate a log on the Desktop (Fixlog.txt). Please post it to your reply.
+`;
 
 function Fixlist({ selectedLines, parsedData }) {
     // Group selected lines by section titles
@@ -21,18 +28,21 @@ function Fixlist({ selectedLines, parsedData }) {
     
     return (
         <div>
-        {Object.keys(groupedLines).map((sectionTitle) => (
-            <div class="fl-outer-section">
-            {/* <h2>{sections[sectionTitle] ?? sectionTitle}</h2> */}
-            <div class="fl-inner-section">
-            {groupedLines[sectionTitle].map((line) => (
-                <div class="fl-line">
-                {parsedData[line.fileType][sectionTitle][line.lineIndex]}
+            <pre className="head">
+                {headMessage}
+            </pre>
+            {Object.keys(groupedLines).map((sectionTitle) => (
+                <div className="fl-outer-section" key={sectionTitle}>
+                    {/* <h2>{sectionTitle}</h2> */}
+                    <div className="fl-inner-section">
+                        {groupedLines[sectionTitle].map((line, index) => (
+                            <div className="fl-line" key={index}>
+                                {parsedData[line.fileType][sectionTitle][line.lineIndex]}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ))}
-            </div>
-            </div>
-        ))}
         </div>
     );
 }
