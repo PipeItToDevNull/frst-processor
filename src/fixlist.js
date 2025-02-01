@@ -1,7 +1,6 @@
 import React from 'react';
 
-const headMessage = `
-Download attached **fixlist.txt** file and save it to the Desktop.
+const cannedHeader = `Download the attached **fixlist.txt** file and save it to the Desktop.
 
 **NOTE** It's important that both files, **FRST/FRST64** and **fixlist.txt** are in the same location or the fix will not work.
 
@@ -14,6 +13,13 @@ After that let the tool complete its run.
 
 When finished FRST will generate a log on the Desktop (Fixlog.txt). Please post it to your reply.
 `;
+
+const fixlistStart = `Start::
+SystemRestore: On
+CreateRestorePoint:
+CloseProcesses:`
+
+const fixlistEnd = `End::`
 
 function Fixlist({ selectedLines, parsedData }) {
     // Group selected lines by section titles
@@ -28,9 +34,17 @@ function Fixlist({ selectedLines, parsedData }) {
     
     return (
         <div>
-            <pre className="head">
-                {headMessage}
-            </pre>
+            <div className='content'>
+                <p>Review your completed fixlist below</p>
+                <p>Paste the following message block to the user to explain how to use this Fixlist</p>
+            </div>
+            <div className="content prewrap">
+                {cannedHeader}
+            </div>
+            <div className="content bulk-content">
+            <div className="prewrap">
+                {fixlistStart}
+            </div>
             {Object.keys(groupedLines).map((sectionTitle) => (
                 <div className="fl-outer-section" key={sectionTitle}>
                     {/* <h2>{sectionTitle}</h2> */}
@@ -43,6 +57,10 @@ function Fixlist({ selectedLines, parsedData }) {
                     </div>
                 </div>
             ))}
+            <div className="prewrap">
+                {fixlistEnd}
+            </div>
+            </div>
         </div>
     );
 }

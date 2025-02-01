@@ -36,10 +36,14 @@ body {
 }
 
 /* The central part of the page holding results */
-#content {
+.content {
     background-color: var(--b3);
     border-radius: .5em;
     padding: 1em;
+    margin-bottom: 1em;
+}
+
+.bulk-content {
     font-size: .75rem;
 }
 
@@ -47,6 +51,10 @@ body {
     background-color: var(--color-blue);
     border-radius: .5rem;
     padding: .25rem;
+}
+
+.prewrap {
+    white-space: pre-wrap;
 }
 
 /* used for upload items */

@@ -25,6 +25,7 @@ function ContentDisplay({ header, parsedData, isSelected, handleLineClick }) {
                             </li>
                         ))}
                     </ul>
+                    <div className="bulk-content">
                     {Object.keys(parsedData).map((fileType, index) => (
                         <div key={index}>
                             {Object.keys(parsedData[fileType]).map((sectionTitle, subIndex) => (
@@ -45,6 +46,7 @@ function ContentDisplay({ header, parsedData, isSelected, handleLineClick }) {
                             ))}
                         </div>
                     ))}
+                    </div>
                 </div>
             ) : (
                 <p>Upload an archive containing FRST.txt and Addition.txt to start.</p>

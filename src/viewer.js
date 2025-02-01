@@ -104,18 +104,18 @@ function FRSTViewer() {
             </div>
             </>
         )}
-        <div id="content">
         {showSelected ? (
             <Fixlist selectedLines={selectedLines} parsedData={parsedData} />
         ) : (
+            <div class="content">
             <ContentDisplay
             header={header}
             parsedData={parsedData}
             isSelected={isSelected}
             handleLineClick={handleLineClick}
             />
+            </div>
         )}
-        </div>
         </div>
         </div>
     );
