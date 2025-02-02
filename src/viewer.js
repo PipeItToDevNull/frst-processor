@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import JSZip from 'jszip';
+import { Helmet } from 'react-helmet';
 import ContentDisplay from './contentDisplay';
 import Fixlist from './fixlist';
+import Footer from './footer';
+
+// Retrieve the site name and API URL from environment variables
+const SITE_NAME = process.env.REACT_APP_SITE_NAME;
 
 function FRSTViewer() {
     const [header, setHeader] = useState('');
@@ -88,8 +93,11 @@ function FRSTViewer() {
     
     return (
         <div>
+        <Helmet>
+        <title>{SITE_NAME}</title>
+        </Helmet>
         <div id="container">
-        <h1>FRST Parser</h1>
+        <h1>{SITE_NAME}</h1>
         {!showSelected && (
             <>
             <div class="button-container">
@@ -116,6 +124,7 @@ function FRSTViewer() {
             />
             </div>
         )}
+        <Footer />
         </div>
         </div>
     );

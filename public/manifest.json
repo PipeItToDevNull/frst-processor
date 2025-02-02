@@ -1,6 +1,6 @@
 {
-  "short_name": "WebDBG",
-  "name": "Web based dmp file processor",
+  "short_name": "FRST Processor",
+  "name": "Web based FRST processor",
   "icons": [
     {
       "src": "favicon.ico",
