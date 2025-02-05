@@ -1,7 +1,8 @@
 import React from 'react';
 import { saveAs } from 'file-saver';
 
-const cannedHeader = `Download the attached **fixlist.txt** file and save it to the Desktop.
+const cannedHeader = `
+Download the attached **fixlist.txt** file and save it to the Desktop.
 
 **NOTE** It's important that both files, **FRST/FRST64** and **fixlist.txt** are in the same location or the fix will not work.
 
@@ -54,12 +55,12 @@ function Fixlist({ selectedLines, parsedData }) {
 
     return (
         <div>
-            <div class="button-container">
-            <div class="button-div">
-            <button onClick={downloadFixlist}>Download Fixlist</button>
+            <div className="button-container">
+                <div className="button-div">
+                    <button onClick={downloadFixlist}>Download Fixlist</button>
+                </div>
             </div>
-            </div>
-            <div className='content'>
+            <div className="content">
                 <p>Review your completed fixlist below</p>
                 <p>Paste the following message block to the user to explain how to use this Fixlist</p>
             </div>
