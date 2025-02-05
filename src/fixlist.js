@@ -1,8 +1,7 @@
 import React from 'react';
 import { saveAs } from 'file-saver';
 
-const cannedHeader = `
-Download the attached **fixlist.txt** file and save it to the Desktop.
+const cannedHeader = `Download the attached **fixlist.txt** file and save it to the Desktop.
 
 **NOTE** It's important that both files, **FRST/FRST64** and **fixlist.txt** are in the same location or the fix will not work.
 
